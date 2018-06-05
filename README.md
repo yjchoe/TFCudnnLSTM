@@ -15,6 +15,7 @@ According to [this nice benchmark result by RETURNN](http://returnn.readthedocs.
 `CudnnLSTM` achieves significant speedups 
 compared to TensorFlow's other LSTM implementations: 
 ~5x faster than `BasicLSTM` and ~2x faster than `LSTMBlockFused`.
+
 (Their own version of LSTM also achieves a comparative performance to `CudnnLSTM`,
 but we do not test it here.)
 
