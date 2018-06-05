@@ -11,7 +11,7 @@ A simple template for TensorFlow's highly efficient `CudnnLSTM` module
 
 ## Benchmarks
 
-According to [this nice benchmark result by RETURNN](http://returnn.readthedocs.io/en/latest/tf_lstm_benchmark.html),
+According to [this benchmark result by RETURNN](http://returnn.readthedocs.io/en/latest/tf_lstm_benchmark.html),
 `CudnnLSTM` achieves significant speedups 
 compared to TensorFlow's other LSTM implementations: 
 ~5x faster than `BasicLSTM` and ~2x faster than `LSTMBlockFused`.
