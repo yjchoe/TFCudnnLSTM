@@ -26,23 +26,22 @@ According to [this benchmark result by RETURNN](http://returnn.readthedocs.io/en
 compared to TensorFlow's other LSTM implementations
 (~2x faster than `LSTMBlockFused` and ~5x faster than `BasicLSTM`).
 
-### PTB Experiments
+### Language Modeling Experiments
 
 We also took [the tutorial code for PTB language modeling](https://github.com/tensorflow/models/blob/master/tutorials/rnn/ptb/ptb_word_lm.py) 
 and tried running the three versions of LSTM implemented there: 
 `BasicLSTMCell`, `LSTMBlockCell`, and `CudnnLSTM`.
 We found that the `CudnnLSTM` example does not run in TF v1.8 due to 
-API changes, but after changing we were able to run it on a single GPU.
-The benchmark results we found are as follows:
+API changes, but after fixing minor issues we were able to run it on a single GPU.
+The benchmark results we got running the "large" model are as follows:
 
 Module          | Average wps* | Speedup w.r.t. `BasicLSTMCell`
 ----------------|--------------|--------------------------------
-`BasicLSTMCell` | **15k**      | 1x
-`LSTMBlockCell` | **17k**      | 1.1x
-`CudnnLSTM`     | **32k**      | 2.1x
+`BasicLSTMCell` |   15k        | 1x
+`LSTMBlockCell` |   17k        | 1.1x
+`CudnnLSTM`     | **32k**      | **2.1x**
 
-*wps refers to the number of data items (i.e. input word sequence & target word)
-processed per second.  
+*wps refers to the number of processed words per second.  
 
 In all three cases, we used a single NVIDIA Tesla P40 GPU, which was utilized 
 80-85% (100% memory) during training. 
@@ -73,12 +72,12 @@ For one thing, PyTorch's `nn.LSTM` is not a `contrib` module with little documen
 While we leave a rigorous comparison between PyTorch's `nn.LSTM` and 
 TensorFlow's `cudnn_rnn.CudnnLSTM` as future work, it does appear that 
 PyTorch's version is as efficient as but more stable than TensorFlow's counterpart.
-When we tried running [PyTorch's own LSTM language model example](https://github.com/pytorch/examples/tree/0.4/word_language_model),
+When we tried running [PyTorch's own LSTM language modeling example](https://github.com/pytorch/examples/tree/0.4/word_language_model),
 using nearly the same set of parameters 
 (2 layers, 1.5k hidden size, 35k vocab size, 20 batch size and 35 timesteps),
-we got around **100 milliseconds per batch** on a single P40 GPU (96% utilization). 
+we got around **100 milliseconds per batch** on a single P40 GPU (95+% utilization). 
 For the aforementioned tutorial code from TensorFlow, 
-we got around **120 milliseconds per batch** on the same machine.
+we got around **120 milliseconds per batch** on the same machine (95+% utilization).
 
 So, if you're already a PyTorch user and your system is built on PyTorch, 
 there's little reason to switch to using TF's `CudnnLSTM` for performance, at least for now. 
